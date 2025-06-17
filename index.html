@@ -11,17 +11,22 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Arial Black', Arial, sans-serif;
-            background-color: white;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-        }
+    body {
+        font-family: 'Arial Black', Arial, sans-serif;
+        background-image: url('nuke.jpg'); /* Replace with your actual image path or URL */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+    }
+
 
         .container {
             display: flex;
@@ -55,7 +60,7 @@
             padding: 30px;
             border: 2px solid black;
             border-radius: 10px;
-            background-color: white;
+            
         }
 
         .countdown {
@@ -109,54 +114,75 @@
         <a href="#" class="twitter-link" onclick="openTwitter()">twitter</a>
         
         <div class="countdown-container">
-            <div class="countdown" id="countdown">02:53:47</div>
+            <div class="countdown" id="countdown">loading</div>
             <div class="time-labels">TIME REMAINING</div>
         </div>
         
         <a href="#" class="why-link" onclick="openWhy()">why?</a>
     </div>
-    <div style="margin-top: 40px; font-size: 1.2rem; color: #666; letter-spacing: 1px;">
+    <div style="margin-top: 40px; font-size: 1.2rem; color: #ffffff; letter-spacing: 1px;">
    wait here with us for the end of the world
 </div>
 
-    <script>
-        // Initialize countdown with 2 hours, 53 minutes, 47 seconds
-        let totalSeconds = 2 * 3600 + 53 * 60 + 47;
-        
-        function updateCountdown() {
-            if (totalSeconds <= 0) {
-                document.getElementById('countdown').textContent = '00:00:00';
-                return;
-            }
-            
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            
-            const timeString = 
-                String(hours).padStart(2, '0') + ':' +
-                String(minutes).padStart(2, '0') + ':' +
-                String(seconds).padStart(2, '0');
-            
-            document.getElementById('countdown').textContent = timeString;
-            totalSeconds--;
-        }
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        
-        // Initialize display
-        updateCountdown();
-        
-        function openTwitter() {
-            // Replace with your Twitter URL
-            window.open('https://x.com/Doomsday_Count', '_blank');
-        }
-        
-        function openWhy() {
-            // Replace with your Twitter post URL
-            window.open('https://x.com/WhiteHouse/status/1934745869821370570', '_blank');
-        }
-    </script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD3gwRSMLX9HfjnzcVgv5HwZdKCOun-Vq8",
+    authDomain: "counter-c8a9e.firebaseapp.com",
+    databaseURL: "https://counter-c8a9e-default-rtdb.firebaseio.com",
+    projectId: "counter-c8a9e",
+    storageBucket: "counter-c8a9e.firebasestorage.app",
+    messagingSenderId: "659440093461",
+    appId: "1:659440093461:web:14ae36d77e0774340ec11c",
+    measurementId: "G-9TRENEDX2P"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Listen for timer updates
+  onValue(ref(database, 'countdown/endTime'), (snapshot) => {
+    const endTime = snapshot.val();
+    if (endTime) {
+      startLiveCountdown(endTime);
+    } else {
+      document.getElementById('countdown').textContent = 'NO TIME SET';
+    }
+  });
+
+  let countdownInterval;
+
+  function startLiveCountdown(endTime) {
+    clearInterval(countdownInterval); // prevent duplicates
+
+    countdownInterval = setInterval(() => {
+      const now = Date.now();
+      const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+
+      const hours = Math.floor(remaining / 3600);
+      const minutes = Math.floor((remaining % 3600) / 60);
+      const seconds = remaining % 60;
+
+      const timeString = 
+        String(hours).padStart(2, '0') + ':' +
+        String(minutes).padStart(2, '0') + ':' +
+        String(seconds).padStart(2, '0');
+
+      document.getElementById('countdown').textContent = timeString;
+
+      if (remaining <= 0) clearInterval(countdownInterval);
+    }, 1000);
+  }
+
+  // (Run this ONCE to set countdown, then comment again)
+   //const endTime = Date.now() + (2 * 3600 + 53 * 60 + 47) * 1000;
+   //set(ref(database, 'countdown/endTime'), endTime);
+
+  window.openTwitter = () => window.open('https://twitter.com', '_blank');
+  window.openWhy = () => window.open('https://twitter.com', '_blank');
+</script>
+
 </body>
 </html>
