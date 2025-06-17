@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOOMSDAY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background-color: white;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .twitter-link {
+            color: black;
+            text-decoration: underline;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .twitter-link:hover {
+            opacity: 0.7;
+        }
+
+        .countdown-container {
+            margin: 40px 0;
+            padding: 30px;
+            border: 2px solid black;
+            border-radius: 10px;
+            background-color: white;
+        }
+
+        .countdown {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+            letter-spacing: 3px;
+            color: black;
+        }
+
+        .time-labels {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            letter-spacing: 8px;
+            color: #666;
+        }
+
+        .why-link {
+            color: black;
+            text-decoration: underline;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .why-link:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .countdown {
+                font-size: 2.5rem;
+            }
+            
+            .countdown-container {
+                padding: 20px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">DOOMSDAY COUNTDOWN</h1>
+        
+        <a href="#" class="twitter-link" onclick="openTwitter()">twitter</a>
+        
+        <div class="countdown-container">
+            <div class="countdown" id="countdown">02:53:47</div>
+            <div class="time-labels">TIME REMAINING</div>
+        </div>
+        
+        <a href="#" class="why-link" onclick="openWhy()">why?</a>
+    </div>
+    <div style="margin-top: 40px; font-size: 1.2rem; color: #666; letter-spacing: 1px;">
+   wait here with us for the end of the world
+</div>
+
+    <script>
+        // Initialize countdown with 2 hours, 53 minutes, 47 seconds
+        let totalSeconds = 2 * 3600 + 53 * 60 + 47;
+        
+        function updateCountdown() {
+            if (totalSeconds <= 0) {
+                document.getElementById('countdown').textContent = '00:00:00';
+                return;
+            }
+            
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            const timeString = 
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+            
+            document.getElementById('countdown').textContent = timeString;
+            totalSeconds--;
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        
+        // Initialize display
+        updateCountdown();
+        
+        function openTwitter() {
+            // Replace with your Twitter URL
+            window.open('https://twitter.com', '_blank');
+        }
+        
+        function openWhy() {
+            // Replace with your Twitter post URL
+            window.open('https://twitter.com', '_blank');
+        }
+    </script>
+</body>
+</html>
